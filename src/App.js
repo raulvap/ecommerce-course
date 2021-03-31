@@ -2,23 +2,20 @@ import React from "react";
 import { Switch, Route } from "react-router-dom";
 
 import HomePage from "./pages/homepage";
+import ShopPage from "./pages/shop";
+import Header from "./components/header/header.component.jsx";
 
 import "./App.css";
-
-//una página de inicio
-const HatsPage = () => (
-   <div>
-      <h1>HATS PAGE </h1>
-   </div>
-);
 
 function App() {
    return (
       <div>
+         <Header />
+         {/* al poner el Header fuera del switch, siempre se va a mostrar en todas las páginas */}
          <Switch>
             {/* Switch explained in lesson 76 */}
             <Route exact path="/" component={HomePage} />
-            <Route path="/hats" component={HatsPage} />
+            <Route path="/shop" component={ShopPage} />
          </Switch>
       </div>
    );
