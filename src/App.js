@@ -2,7 +2,7 @@ import React from "react";
 import { Switch, Route } from "react-router-dom";
 
 // --- authentication:
-import { auth } from "./firebase/firebase.utils";
+import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
 
 // --- pages:
 import HomePage from "./pages/homepage";
@@ -27,10 +27,30 @@ class App extends React.Component {
    unsubscribeFromAuth = null;
 
    componentDidMount() {
-      this.unsubscribeFromAuth = auth.onAuthStateChanged((user) => {
-         this.setState({ currentUser: user });
+      this.unsubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
+         //lesson 101:
+         // createUserProfileDocument(user);
 
-         console.log(user);
+         //Lesson 103: we store the UserData in the "state" of our app to use it
+         if (userAuth) {
+            const userRef = await createUserProfileDocument(userAuth);
+
+            userRef.onSnapshot((snapshot) => {
+               this.setState(
+                  {
+                     currentUser: {
+                        id: snapshot.id,
+                        ...snapshot.data(),
+                     },
+                  },
+                  () => {
+                     console.log(this.state);
+                  }
+               );
+            });
+         } else {
+            this.setState({ currentUser: userAuth });
+         }
       });
    }
 
