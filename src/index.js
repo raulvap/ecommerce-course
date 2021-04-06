@@ -2,6 +2,12 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 
+// lesson 114: setting redux:
+import { Provider } from "react-redux";
+
+//Lesson 115: import the store of the reducers/to manage state
+import store from "./redux/store";
+
 import "antd/dist/antd.css"; // or 'antd/dist/antd.less'
 import "./index.css";
 import App from "./App";
@@ -10,10 +16,13 @@ import reportWebVitals from "./reportWebVitals";
 
 ReactDOM.render(
    <React.StrictMode>
-      <BrowserRouter>
-         {/* BrowserRouter le da toda la funcionalidad de routing a los children que tenga: */}
-         <App />
-      </BrowserRouter>
+      <Provider store={store}>
+         {/* Lesson 114: Provider components is the parent, that have access to every state & store code */}
+         <BrowserRouter>
+            {/* BrowserRouter le da toda la funcionalidad de routing a los children que tenga: */}
+            <App />
+         </BrowserRouter>
+      </Provider>
    </React.StrictMode>,
    document.getElementById("root")
 );
