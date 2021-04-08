@@ -5,8 +5,12 @@ import { BrowserRouter } from "react-router-dom";
 // lesson 114: setting redux:
 import { Provider } from "react-redux";
 
+// Lesson 141: localStorage:
+import { PersistGate } from "redux-persist/integration/react";
+import { store, persistore } from "./redux/store";
+
 //Lesson 115: import the store of the reducers/to manage state
-import store from "./redux/store";
+// import store from "./redux/store";
 
 import "antd/dist/antd.css"; // or 'antd/dist/antd.less'
 import "./index.css";
@@ -20,7 +24,10 @@ ReactDOM.render(
          {/* Lesson 114: Provider components is the parent, that have access to every state & store code */}
          <BrowserRouter>
             {/* BrowserRouter le da toda la funcionalidad de routing a los children que tenga: */}
-            <App />
+            <PersistGate persistor={persistore}>
+               {/* Lesson 141: local storage */}
+               <App />
+            </PersistGate>
          </BrowserRouter>
       </Provider>
    </React.StrictMode>,

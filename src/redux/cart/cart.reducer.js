@@ -2,7 +2,7 @@
 import { CartActionTypes } from "./cart.types";
 
 //Lesson 124: utils:
-import { addItemToCart } from "./cart.utils";
+import { addItemToCart, removeItemFromCart } from "./cart.utils";
 
 const INITIAL_STATE = {
    hidden: true,
@@ -25,6 +25,22 @@ const cartReducer = (state = INITIAL_STATE, action) => {
             // cartItems: [...state.cartItems, action.payload],
             // Lesson 124:
             cartItems: addItemToCart(state.cartItems, action.payload),
+         };
+
+      // Lesson 138: 3rd step, create the reducer case
+      //update the cartItems without the selected item
+      case CartActionTypes.CLEAR_ITEM_FROM_CART:
+         return {
+            ...state,
+            cartItems: state.cartItems.filter((cartItem) => cartItem.id !== action.payload.id),
+         };
+
+      //Lesson 139:
+      case CartActionTypes.REMOVE_ITEM:
+         return {
+            ...state,
+            // here we will use cart.utils
+            cartItems: removeItemFromCart(state.cartItems, action.payload),
          };
 
       default:
