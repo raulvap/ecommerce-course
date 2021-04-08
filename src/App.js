@@ -3,8 +3,11 @@ import { Switch, Route, Redirect } from "react-router-dom";
 
 //lesson: 117 connect reducers
 import { connect } from "react-redux";
+import { createStructuredSelector } from "reselect";
+
 // reducers:
 import { setCurrentUser } from "./redux/user/user.actions";
+import { selectCurrentUser } from "./redux/user/user.selector";
 
 // --- authentication:
 import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
@@ -13,6 +16,7 @@ import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
 import HomePage from "./pages/homepage";
 import ShopPage from "./pages/shop";
 import SignInUp from "./pages/sign-in-up";
+import CheckoutPage from "./pages/checkout";
 import Header from "./components/header/header.component.jsx";
 
 import "./App.css";
@@ -84,6 +88,7 @@ class App extends React.Component {
                {/* Switch explained in lesson 76 */}
                <Route exact path="/" component={HomePage} />
                <Route path="/shop" component={ShopPage} />
+               <Route exact path="/checkout" component={CheckoutPage} />
                {/* Lesson 118: render  */}
                <Route
                   exact
@@ -97,8 +102,13 @@ class App extends React.Component {
 }
 
 // Lesson 118: redirect if there is a User Logged In:
-const mapStateToProps = ({ user }) => ({
-   currentUser: user.currentUser,
+// const mapStateToProps = ({ user }) => ({
+//    currentUser: user.currentUser,
+// });
+
+//Lesson 132: changing structures:
+const mapStateToProps = createStructuredSelector({
+   currentUser: selectCurrentUser,
 });
 
 // Lesson 117:
