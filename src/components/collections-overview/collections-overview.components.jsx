@@ -4,7 +4,8 @@ import React from "react";
 // --- REDUX:
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
-import { selectCollections } from "../../redux/shop/shop.selectors";
+//lesson 152: change the function:
+import { selectCollectionsForPreview } from "../../redux/shop/shop.selectors";
 
 // --- COMPONENT:
 import CollectionPreview from "../collectionPreview/collectionPreview.component";
@@ -24,8 +25,10 @@ function CollectionsOverview({ collections }) {
 }
 
 const mapStateToProps = createStructuredSelector({
-   collections: selectCollections,
+   //Lesson 152: change the function props
+   // collections: selectCollections,
    //selectCollections comes from shop.selector
+   collections: selectCollectionsForPreview,
 });
 
 export default connect(mapStateToProps)(CollectionsOverview);

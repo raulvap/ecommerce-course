@@ -1,4 +1,5 @@
 import React from "react";
+import { Route } from "react-router-dom";
 
 // **************************
 // EVERYTHING CHANGE ON LESSON 144:
@@ -12,6 +13,7 @@ import React from "react";
 
 // --- COMPONENTS ---
 // import CollectionPreview from "../../components/collectionPreview/collectionPreview.component";
+import CollectionPage from "../../pages/collection/collection.page";
 import CollectionsOverview from "../../components/collections-overview/collections-overview.components";
 
 // --- DATA ---
@@ -40,13 +42,18 @@ import CollectionsOverview from "../../components/collections-overview/collectio
 //    }
 // }
 
-function ShopPage({ collections }) {
+// function ShopPage({ collections }) {
+//Lesson 145: change the routes:
+function ShopPage({ match }) {
    return (
       <div className="shop-page">
          {/* {collections.map(({ id, ...otherCollectionProps }) => (
             <CollectionPreview key={id} {...otherCollectionProps} />
          ))} */}
-         <CollectionsOverview />
+         {/* <CollectionsOverview /> */}
+         {/* Lesson 145: nested route */}
+         <Route exact path={`${match.path}`} component={CollectionsOverview} />
+         <Route path={`${match.path}/:collectionId`} component={CollectionPage} />
       </div>
    );
 }
