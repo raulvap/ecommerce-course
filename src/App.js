@@ -10,7 +10,14 @@ import { setCurrentUser } from "./redux/user/user.actions";
 import { selectCurrentUser } from "./redux/user/user.selector";
 
 // --- authentication:
-import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
+import {
+   auth,
+   createUserProfileDocument,
+   // addCollectionAndDocuments,
+} from "./firebase/firebase.utils";
+
+// Lesson 175: adding collectionData to firebase: just one time:
+// import { selectCollectionsForPreview } from "./redux/shop/shop.selectors";
 
 // --- pages:
 import HomePage from "./pages/homepage";
@@ -38,7 +45,11 @@ class App extends React.Component {
 
    componentDidMount() {
       //Lesson 117: deconstructing:
-      const { setCurrentUser } = this.props;
+      const {
+         setCurrentUser,
+         // Lesson 175: adding collectionData to firebase: just one time:
+         // collectionsArray,
+      } = this.props;
 
       this.unsubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
          //lesson 101:
@@ -71,6 +82,12 @@ class App extends React.Component {
             });
          } else {
             setCurrentUser(userAuth);
+
+            // Lesson 175: adding collectionData to firebase: just one time:
+            // addCollectionAndDocuments(
+            //    "collections",
+            //    collectionsArray.map(({ title, items }) => ({ title, items }))
+            // );
          }
       });
    }
@@ -109,6 +126,9 @@ class App extends React.Component {
 //Lesson 132: changing structures:
 const mapStateToProps = createStructuredSelector({
    currentUser: selectCurrentUser,
+
+   // Lesson 175: adding collectionData to firebase: just one time:
+   // collectionsArray: selectCollectionsForPreview,
 });
 
 // Lesson 117:

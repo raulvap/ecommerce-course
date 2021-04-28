@@ -1,14 +1,28 @@
 // Lesson 143: data into redux state
-import SHOP_DATA from "../../data/shoppingData";
+// in lesson 181 we remove because now we have the state on redux
+// import SHOP_DATA from "../../data/shoppingData";
+
+// Lesson 179: using firestore to import data_collection:
+import ShopActionTypes from "./shop.types";
 
 //  1st STEP: create the initial state:
 const INITIAL_STATE = {
-   collections: SHOP_DATA,
+   // collections: SHOP_DATA,
+
+   //Lesson 181:
+   collections: null,
 };
 
 // 2nd STEP: create the reducer
 const shopReducer = (state = INITIAL_STATE, action) => {
    switch (action.type) {
+      //Lesson 179: creating new case:
+      case ShopActionTypes.UPDATE_COLLECTIONS:
+         return {
+            ...state,
+            collections: action.payload,
+         };
+
       default:
          return state;
    }

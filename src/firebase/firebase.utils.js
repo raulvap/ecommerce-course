@@ -39,7 +39,7 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
 
       // hacemos una conexión con la base de datos:
       try {
-         //creamos un nuevo usuario:
+         //creamos un nuevo usuario: .set()
          await userRef.set({
             displayName,
             email,
@@ -70,3 +70,40 @@ provider.setCustomParameters({ prompt: "select_account" });
 export const signInWithGoogle = () => auth.signInWithPopup(provider);
 
 export default firebase;
+
+// ***************************************************************************
+// Lesson 175: creating a collection in Firebase. (taking data from app.js)
+export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => {
+   const collectionRef = firestore.collection(collectionKey);
+
+   // Lesson 176: we create a batch to send all the info to firestore
+   const batch = firestore.batch();
+   objectsToAdd.forEach((obj) => {
+      //creamos un ID único:
+      const newDocRef = collectionRef.doc();
+      batch.set(newDocRef, obj);
+   });
+
+   return await batch.commit();
+};
+
+// Lesson 178: convert collections to an object:
+export const convertCollectionsSnapshotToMap = (collections) => {
+   const transformedCollection = collections.docs.map((doc) => {
+      const { title, items } = doc.data();
+
+      return {
+         //para hacer una URL que se pueda usar la transformamos:
+         routeName: encodeURI(title.toLowerCase()),
+         id: doc.id,
+         title,
+         items,
+      };
+   });
+
+   //Lesson 179:
+   return transformedCollection.reduce((accumulator, collection) => {
+      accumulator[collection.title.toLowerCase()] = collection;
+      return accumulator;
+   }, {});
+};

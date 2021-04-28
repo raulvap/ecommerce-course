@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 
 //Lesson 116: connect()
 import { connect } from "react-redux";
@@ -17,34 +17,61 @@ import CartDropdown from "../cart-dropdrown/cart-dropdrown.component";
 // importamos el logo como un componente
 import { ReactComponent as Logo } from "../../assets/svg/crown.svg";
 
-import "./header.styles.scss";
+//Lesson 166: changing for styles-component
+// import "./header.styles.scss";
+import {
+   HeaderContainer,
+   LogoContainer,
+   OptionsContainer,
+   OptionDiv,
+   OptionLink,
+} from "./header.styles";
 
 function Header({ currentUser, hidden }) {
+   //Lesson 166: changing for styles-component
+   // return (
+   //    <div className="header">
+   //       <Link className="logo-container" to="/">
+   //          <Logo className="logo" />
+   //       </Link>
+   //       <div className="options">
+   //          <Link className="option" to="/shop">
+   //             SHOP
+   //          </Link>
+   //          <Link className="option" to="/contact">
+   //             CONTACT
+   //          </Link>
+   //          {currentUser ? (
+   //             <div className="option" onClick={() => auth.signOut()}>
+   //                SIGN OUT
+   //             </div>
+   //          ) : (
+   //             <Link className="option" to="/signin">
+   //                SIGN IN
+   //             </Link>
+   //          )}
+   //          <CartIcon />
+   //       </div>
+   //       {hidden ? null : <CartDropdown />}
+   //    </div>
+   // );
    return (
-      <div className="header">
-         <Link className="logo-container" to="/">
+      <HeaderContainer>
+         <LogoContainer to="/">
             <Logo className="logo" />
-         </Link>
-         <div className="options">
-            <Link className="option" to="/shop">
-               SHOP
-            </Link>
-            <Link className="option" to="/contact">
-               CONTACT
-            </Link>
+         </LogoContainer>
+         <OptionsContainer>
+            <OptionLink to="/shop">SHOP</OptionLink>
+            <OptionLink to="/contact">CONTACT</OptionLink>
             {currentUser ? (
-               <div className="option" onClick={() => auth.signOut()}>
-                  SIGN OUT
-               </div>
+               <OptionDiv onClick={() => auth.signOut()}>SIGN OUT</OptionDiv>
             ) : (
-               <Link className="option" to="/signin">
-                  SIGN IN
-               </Link>
+               <OptionLink to="/signin">SIGN IN</OptionLink>
             )}
             <CartIcon />
-         </div>
+         </OptionsContainer>
          {hidden ? null : <CartDropdown />}
-      </div>
+      </HeaderContainer>
    );
 }
 

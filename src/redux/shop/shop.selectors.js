@@ -26,15 +26,16 @@ export const selectCollections = createSelector([selectShop], (shop) => shop.col
 
 //Lesson 147: creamos el selector para la acción:
 export const selectCollection = (collectionUrlParam) =>
-   createSelector(
-      [selectCollections],
-      (collections) =>
-         //   collections.find((collection) => collection.id === COLLECTION_ID_MAP[collectionUrlParam])
-         //Lesson 150: Data Normalization
-         collections[collectionUrlParam]
+   createSelector([selectCollections], (collections) =>
+      //   collections.find((collection) => collection.id === COLLECTION_ID_MAP[collectionUrlParam])
+      //Lesson 150: Data Normalization
+      // collections[collectionUrlParam]
+
+      // Lesson 181: usamos un spin para que se muestre cuando está cargando
+      collections ? collections[collectionUrlParam] : null
    );
 
 // Lesson 152: to use in collections-overview
 export const selectCollectionsForPreview = createSelector([selectCollections], (collections) =>
-   Object.keys(collections).map((key) => collections[key])
+   collections ? Object.keys(collections).map((key) => collections[key]) : []
 );
