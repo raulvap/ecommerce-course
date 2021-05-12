@@ -8,13 +8,24 @@ import { Route } from "react-router-dom";
 
 // --- REDUX: (lesson 143) (modified on lesson 144)
 import { connect } from "react-redux";
-// import { createStructuredSelector } from "reselect";
+import { createStructuredSelector } from "reselect";
 // import { selectCollections } from "../../redux/shop/shop.selectors";
 // Lesson 179: import new action:
-import { updateCollections } from "../../redux/shop/shop.actions";
+// import { updateCollections } from "../../redux/shop/shop.actions";
+
+//Lesson 191: container pattern:
+import CollectionsOverviewContainer from "../../components/collections-overview/collections-overview.container";
+import CollectionPageContainer from "../collection/collection.container";
+
+// Lesson 188:
+import { fetchCollectionsStartAsync } from "../../redux/shop/shop.actions";
+import {
+   selectIsCollectionFetching,
+   selectIsCollectionsLoaded,
+} from "../../redux/shop/shop.selectors";
 
 // --- FIRESTORE: (Lesson 178)
-import { firestore, convertCollectionsSnapshotToMap } from "../../firebase/firebase.utils";
+// import { firestore, convertCollectionsSnapshotToMap } from "../../firebase/firebase.utils";
 
 // --- COMPONENTS ---
 // import CollectionPreview from "../../components/collectionPreview/collectionPreview.component";
@@ -22,7 +33,7 @@ import CollectionPage from "../../pages/collection/collection.page";
 import CollectionsOverview from "../../components/collections-overview/collections-overview.components";
 import WithSpinner from "../../components/with-spinner/with-spinner.component";
 //Lesson 182:
-const CollectionsOverviewWithSpinner = WithSpinner(CollectionsOverview);
+// const CollectionsOverviewWithSpinner = WithSpinner(CollectionsOverview);
 const CollectionPageWithSpinner = WithSpinner(CollectionPage);
 
 // --- DATA ---
@@ -94,25 +105,33 @@ class ShopPage extends React.Component {
    unsubscribeFromSnapshot = null;
 
    componentDidMount() {
-      const { updateCollections } = this.props;
-      const collectionRef = firestore.collection("collections");
-
-      // Lesson 187: using API with get (Promises)
-      collectionRef.get().then((snapshot) => {
-         const collectionsMap = convertCollectionsSnapshotToMap(snapshot);
-         updateCollections(collectionsMap);
-         this.setState({ loading: false });
-      });
-
+      //Lesson 188: we dont need this because we are using redux-thunk doing this
+      // const { updateCollections } = this.props;
+      // const collectionRef = firestore.collection("collections");
+      // // Lesson 187: using API with get (Promises)
+      // collectionRef.get().then((snapshot) => {
+      //    const collectionsMap = convertCollectionsSnapshotToMap(snapshot);
+      //    updateCollections(collectionsMap);
+      //    this.setState({ loading: false });
+      // });
       // fetch(
       //    "https://firestore.googleapis.com/v1/projects/e-commerce-raulvap/databases/(default)/documents/collections"
       // )
       //    .then((response) => response.json())
       //    .then((collections) => console.log(collections));
+
+      //Lesson 188:
+      const { fetchCollectionsStartAsync } = this.props;
+      fetchCollectionsStartAsync();
    }
 
    render() {
-      const { match } = this.props;
+      //Lesson 188: sacamos isCollectionFetching
+      const {
+         match,
+         // isCollectionFetching, Lesson 191: we don't use it anymore because the container has all the info
+         // isCollectionsLoaded, Lesson 191: we don't use it anymore because the container has all the info
+      } = this.props;
       const { loading } = this.state;
 
       return (
@@ -124,19 +143,35 @@ class ShopPage extends React.Component {
             <Route
                exact
                path={`${match.path}`}
-               render={(props) => <CollectionsOverviewWithSpinner isLoading={loading} {...props} />}
+               // render={(props) => (
+               //    <CollectionsOverviewWithSpinner isLoading={isCollectionFetching} {...props} />
+               // )}
+               // Lesson 191: container pattern:
+               component={CollectionsOverviewContainer}
             />
             <Route
                path={`${match.path}/:collectionId`}
-               render={(props) => <CollectionPageWithSpinner isLoading={loading} {...props} />}
+               // render={(props) => (
+               //    <CollectionPageWithSpinner isLoading={!isCollectionsLoaded} {...props} />
+               // )}
+               // Lesson 191: container pattern
+               component={CollectionPageContainer}
             />
          </div>
       );
    }
 }
 
+//Lesson 188: we change this: (lesson 191 we dont use this)
+// const mapStateToProps = createStructuredSelector({
+//    isCollectionFetching: selectIsCollectionFetching,
+//    //Lesson 189:
+//    isCollectionsLoaded: selectIsCollectionsLoaded,
+// });
+
 const mapDispatchToProps = (dispatch) => ({
-   updateCollections: (collectionsMap) => dispatch(updateCollections(collectionsMap)),
+   fetchCollectionsStartAsync: () => dispatch(fetchCollectionsStartAsync()),
 });
+// y ahora modificamos el state en la función más arriba:
 
 export default connect(null, mapDispatchToProps)(ShopPage);

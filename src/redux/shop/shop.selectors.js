@@ -39,3 +39,9 @@ export const selectCollection = (collectionUrlParam) =>
 export const selectCollectionsForPreview = createSelector([selectCollections], (collections) =>
    collections ? Object.keys(collections).map((key) => collections[key]) : []
 );
+
+// lesson 188: creamos un nuevo selector:
+export const selectIsCollectionFetching = createSelector([selectShop], (shop) => shop.isFetching);
+
+// Lesson 189:
+export const selectIsCollectionsLoaded = createSelector([selectShop], (shop) => !!shop.collections);

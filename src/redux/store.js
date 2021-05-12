@@ -9,8 +9,11 @@ import logger from "redux-logger";
 
 import rootReducer from "./root-reducer";
 
-// set up the middlewares:
-const middlewares = [];
+// Lesson 188: redux-thunk
+import thunk from "redux-thunk";
+
+// set up the middlewares: (lesson 188)
+const middlewares = [thunk];
 
 // Lesson: 163, para que no aparezca el logger en production
 if (process.env.NODE_ENV === "development") {

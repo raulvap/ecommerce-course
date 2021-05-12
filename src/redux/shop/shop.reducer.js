@@ -11,20 +11,50 @@ const INITIAL_STATE = {
 
    //Lesson 181:
    collections: null,
+
+   //lesson 188:
+   isFetching: false,
+   errorMessage: undefined,
 };
 
 // 2nd STEP: create the reducer
 const shopReducer = (state = INITIAL_STATE, action) => {
    switch (action.type) {
       //Lesson 179: creating new case:
-      case ShopActionTypes.UPDATE_COLLECTIONS:
+      // case ShopActionTypes.UPDATE_COLLECTIONS:
+      //    return {
+      //       ...state,
+      //       collections: action.payload,
+      //    };
+
+      // Lesson 188: fecthing from redux:
+      case ShopActionTypes.FECTH_COLLECTIONS_START:
          return {
             ...state,
+            isFetching: true,
+         };
+
+      case ShopActionTypes.FETCH_COLLECTIONS_SUCCESS:
+         return {
+            ...state,
+            isFetching: false,
             collections: action.payload,
          };
 
+      case ShopActionTypes.FETCH_COLLECTIONS_FAILURE:
+         return {
+            ...state,
+            isFetching: false,
+         };
+
+      //Lesson 188: now reconfigure shop.actions with thunks
+
       default:
-         return state;
+         return {
+            ...state,
+            isFetching: false,
+            errorMessage: action.payload,
+         };
    }
 };
 
